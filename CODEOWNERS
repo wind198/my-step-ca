@@ -1,0 +1,14 @@
+# Placeholder teams — replace with org GitHub/GitLab teams.
+* @platform-team
+
+/root-ca/ @security-pki-admins
+/infrastructure/aws/modules/kms-root/ @security-pki-admins
+/docs/runbooks/root-rotation.md @security-pki-admins
+
+/deploy/ @platform-team
+/intermediate-ca/ @platform-team @security-pki-admins
+/infrastructure/aws/modules/iam-admin/ @platform-team @security-team
+/infrastructure/aws/modules/iam-step-ca/ @platform-team @security-team
+/infrastructure/aws/modules/kms-intermediate/ @platform-team @security-pki-admins
+/infrastructure/aws/prod/ @platform-team @security-pki-admins
+/infrastructure/aws/local/ @platform-team

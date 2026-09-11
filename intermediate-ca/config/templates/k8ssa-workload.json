@@ -1,0 +1,13 @@
+{
+  "subject": {
+    "commonName": "{{ index .Token "kubernetes.io/serviceaccount/service-account.name" }}.{{ index .Token "kubernetes.io/serviceaccount/namespace" }}.svc.cluster.local"
+  },
+  "sans": [
+    {
+      "type": "dns",
+      "value": "{{ index .Token "kubernetes.io/serviceaccount/service-account.name" }}.{{ index .Token "kubernetes.io/serviceaccount/namespace" }}.svc.cluster.local"
+    }
+  ],
+  "keyUsage": ["digitalSignature", "keyEncipherment"],
+  "extKeyUsage": ["serverAuth", "clientAuth"]
+}

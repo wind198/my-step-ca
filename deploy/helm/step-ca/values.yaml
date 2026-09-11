@@ -1,0 +1,110 @@
+# Base values — environment overlays add specifics.
+global:
+  organization: Example Corp
+  domain: example.internal
+
+replicaCount: 2
+
+image:
+  repository: smallstep/step-ca
+  tag: "0.28.3"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: "step-ca"
+
+serviceAccount:
+  create: true
+  name: step-ca
+  annotations: {}
+  # prod IRSA example:
+  # eks.amazonaws.com/role-arn: arn:aws:iam::AWS_ACCOUNT_ID:role/REPLACE_ME-step-ca
+
+service:
+  type: ClusterIP
+  port: 443
+  targetPort: 9000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  # capabilities.drop set in staging/prod — drop ALL breaks step-ca under kind/containerd
+
+probes:
+  readiness:
+    path: /health
+    port: 9000
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  liveness:
+    path: /health
+    port: 9000
+    initialDelaySeconds: 30
+    periodSeconds: 20
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: ""
+
+kms:
+  enabled: true
+  keyId: "REPLACE_ME_INTERMEDIATE_KMS_KEY_ID"
+  region: us-east-1
+  # LocalStack only — leave empty in staging/prod
+  endpointUrl: ""
+
+aws:
+  # Dev/LocalStack: inject temporary credentials via Secret
+  credentialsSecretName: ""
+  # Extra env
+  extraEnv: []
+
+networkPolicy:
+  enabled: true
+  # Dev may set allowAllIngress: true
+  allowAllIngress: false
+  allowedNamespaceLabels: {}
+  egressDNS: true
+  # When endpointUrl set, allow egress to LocalStack/KMS
+  egressCIDRs:
+    - 0.0.0.0/0  # TODO(prod): restrict to KMS/VPC endpoints — documented temporary breadth for scaffold
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: step-ca
+          topologyKey: kubernetes.io/hostname
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+
+# Mounted from ConfigMap created outside chart or via files
+config:
+  existingConfigMap: step-ca-config
+  # keys expected: ca.json, root_ca.crt, intermediate_ca.crt
+
+extraVolumeMounts: []
+extraVolumes: []

@@ -1,0 +1,9 @@
+{
+  "subject": {
+    "commonName": {{ toJson .Subject.CommonName }}
+  },
+  "sans": {{ toJson .SANs }},
+  "keyUsage": ["digitalSignature", "keyEncipherment"],
+  "extKeyUsage": ["serverAuth", "clientAuth"],
+  "_comment": "Map K8SSA namespace/SA to allowed SAN in provisioner policy — never unrestricted."
+}

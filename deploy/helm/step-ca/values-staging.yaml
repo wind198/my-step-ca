@@ -1,0 +1,33 @@
+replicaCount: 2
+
+kms:
+  keyId: "REPLACE_ME_INTERMEDIATE_KMS_KEY_ID"
+  region: "REPLACE_ME_REGION"
+  endpointUrl: ""
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::AWS_ACCOUNT_ID:role/REPLACE_ME-step-ca"
+
+networkPolicy:
+  allowAllIngress: false
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+serviceMonitor:
+  enabled: true

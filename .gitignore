@@ -1,0 +1,49 @@
+# Secrets and private key material
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+!**/examples/**/*.crt.example
+credentials.json
+aws-access-key.json
+password.txt
+*.password
+
+# Local admin / bootstrap workspace (never commit)
+local/**
+!local/.gitkeep
+
+# Explicit: test artifacts (also under local/**)
+local/test-out/
+
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+!**/example.tfvars
+!**/terraform.tfvars.example
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Helm
+charts/*.tgz
+*.tgz
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Python / tooling
+__pycache__/
+.venv/
+
+# Assumed-role session caches
+.aws-local/
+*.session.json

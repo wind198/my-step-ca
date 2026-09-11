@@ -1,0 +1,52 @@
+# Local kind + LocalStack
+replicaCount: 1
+
+image:
+  pullPolicy: Never
+  tag: "kind"
+
+# Official image entrypoint + strict seccomp/RO root causes EPERM on kind.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  # RuntimeDefault applied in staging/prod overlays; Unconfined for kind smoke.
+  seccompProfile:
+    type: Unconfined
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  # no capabilities.drop — required for kind smoke (EPERM otherwise)
+
+kms:
+  endpointUrl: "http://host.docker.internal:4566"
+
+aws:
+  credentialsSecretName: step-ca-aws
+  extraEnv:
+    - name: AWS_EC2_METADATA_DISABLED
+      value: "true"
+
+networkPolicy:
+  allowAllIngress: true
+  egressCIDRs:
+    - 0.0.0.0/0
+
+podDisruptionBudget:
+  enabled: false
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+serviceMonitor:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

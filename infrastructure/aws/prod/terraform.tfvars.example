@@ -1,0 +1,12 @@
+aws_region   = "REPLACE_ME_REGION"
+name_prefix  = "REPLACE_ME-pki"
+
+admin_principal_arns = [
+  "arn:aws:iam::AWS_ACCOUNT_ID:role/REPLACE_ME-sso-pki-admins"
+]
+
+oidc_provider_arn = "arn:aws:iam::AWS_ACCOUNT_ID:oidc-provider/oidc.eks.REPLACE_ME_REGION.amazonaws.com/id/REPLACE_ME"
+oidc_provider_url = "oidc.eks.REPLACE_ME_REGION.amazonaws.com/id/REPLACE_ME"
+
+step_ca_namespace       = "step-ca"
+step_ca_service_account = "step-ca"

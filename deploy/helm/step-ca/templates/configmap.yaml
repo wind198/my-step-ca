@@ -1,0 +1,14 @@
+# Placeholder — config is provided via ConfigMap `step-ca-config` created by deploy scripts.
+# Kept so helm lint has a templates directory with expected resources only.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "step-ca.fullname" . }}-placeholder
+  labels:
+    {{- include "step-ca.labels" . | nindent 4 }}
+  annotations:
+    company-pki.example/note: "Runtime config is {{ .Values.config.existingConfigMap }}; this object is unused."
+data:
+  README: |
+    Mount ca.json + certs from existingConfigMap created outside the chart
+    so Intermediate KMS key ids and certs stay environment-specific.

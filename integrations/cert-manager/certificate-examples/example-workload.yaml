@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: example-workload
+  namespace: default
+spec:
+  secretName: example-workload-tls
+  duration: 1h
+  renewBefore: 15m
+  commonName: example-workload.default.svc.cluster.local
+  dnsNames:
+    - example-workload.default.svc.cluster.local
+  issuerRef:
+    name: step-ca-acme
+    kind: ClusterIssuer

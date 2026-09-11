@@ -1,0 +1,12 @@
+# Copy to backend.tf and fill in before first prod apply.
+# Do NOT apply from PR CI or `make`.
+
+terraform {
+  backend "s3" {
+    bucket         = "REPLACE_ME-terraform-state"
+    key            = "company-pki/prod/aws.tfstate"
+    region         = "REPLACE_ME_REGION"
+    dynamodb_table = "REPLACE_ME-terraform-locks"
+    encrypt        = true
+  }
+}

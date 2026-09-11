@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "organization": "Example Corp",
+  "commonName": "Example Corp Root CA",
+  "key": "awskms:arn=REPLACE_ME_ROOT_KMS_KEY_ARN",
+  "notAfter": "87600h",
+  "comment": "Example only — copy to local/ and substitute ARNs. Do not commit real config."
+}

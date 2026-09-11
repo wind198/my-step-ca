@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "step-ca.fullname" . }}
+  labels:
+    {{- include "step-ca.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "step-ca.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "step-ca.labels" . | nindent 8 }}
+        {{- include "step-ca.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "step-ca.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: step-ca
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # Bypass entrypoint.sh — avoids EPERM under restricted seccomp on kind.
+          command: ["/usr/local/bin/step-ca"]
+          args: ["/home/step/config/ca.json"]
+          ports:
+            - name: https
+              containerPort: 9000
+              protocol: TCP
+          env:
+            - name: AWS_REGION
+              value: {{ .Values.kms.region | quote }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.kms.region | quote }}
+            {{- if .Values.kms.endpointUrl }}
+            - name: AWS_ENDPOINT_URL
+              value: {{ .Values.kms.endpointUrl | quote }}
+            {{- end }}
+            {{- if .Values.aws.credentialsSecretName }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.aws.credentialsSecretName }}
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.aws.credentialsSecretName }}
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_SESSION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.aws.credentialsSecretName }}
+                  key: AWS_SESSION_TOKEN
+                  optional: true
+            {{- end }}
+            {{- with .Values.aws.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.readiness.path }}
+              port: {{ .Values.probes.readiness.port }}
+              scheme: HTTPS
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probes.liveness.path }}
+              port: {{ .Values.probes.liveness.port }}
+              scheme: HTTPS
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /home/step/config/ca.json
+              subPath: ca.json
+              readOnly: true
+            - name: config
+              mountPath: /home/step/certs/root_ca.crt
+              subPath: root_ca.crt
+              readOnly: true
+            - name: config
+              mountPath: /home/step/certs/intermediate_ca.crt
+              subPath: intermediate_ca.crt
+              readOnly: true
+            - name: config
+              mountPath: /home/step/templates/k8ssa-workload.json
+              subPath: k8ssa-workload.json
+              readOnly: true
+            - name: config
+              mountPath: /home/step/templates/external-leaf.json
+              subPath: external-leaf.json
+              readOnly: true
+            - name: db
+              mountPath: /home/step/db
+            - name: tmp
+              mountPath: /tmp
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Values.config.existingConfigMap }}
+        - name: db
+          {{- if .Values.persistence.enabled }}
+          emptyDir: {}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: tmp
+          emptyDir: {}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 60

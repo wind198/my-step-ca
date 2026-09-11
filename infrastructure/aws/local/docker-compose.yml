@@ -1,0 +1,20 @@
+services:
+  localstack:
+    image: localstack/localstack:4.3
+    container_name: step-ca-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=kms,iam,sts
+      - DEBUG=0
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack-data:/var/lib/localstack
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  localstack-data:
