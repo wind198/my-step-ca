@@ -7,7 +7,7 @@ Stable project-wide rules. Module internals stay in module READMEs.
 - `root-ca/` — offline Root only. Never a Kubernetes chart or `deploy/` subtree.
 - `intermediate-ca/` — logical online CA config (provisioners, templates, example `ca.json`).
 - `infrastructure/aws/` — Terraform. `local/` vs `prod/` roots; shared `modules/`.
-- `deploy/helm/step-ca/` — online Intermediate. Env overlays: `values-{dev,staging,prod}.yaml`.
+- `deploy/helm/step-ca/` — online Intermediate. Env overlays: `values-{dev,prod}.yaml`.
 - `docs/` — project-level only. Feature docs live next to the code.
 - `local/` — gitignored artifacts. Never commit.
 

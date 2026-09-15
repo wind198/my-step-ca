@@ -8,3 +8,6 @@ make deploy-dev
 ```
 
 Values: `deploy/helm/step-ca/values-dev.yaml`
+
+Identity: Kubernetes Secret `step-ca-aws` (STS session). Not IRSA.
+

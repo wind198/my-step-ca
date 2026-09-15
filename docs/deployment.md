@@ -5,8 +5,7 @@ Runtime and operator overview. Step-by-step commands live in [runbooks/](runbook
 ## Environments
 
 - **local / dev** — kind + LocalStack. [deploy/environments/dev/README.md](../deploy/environments/dev/README.md). Chart overlay: `deploy/helm/step-ca/values-dev.yaml`.
-- **staging** — real AWS KMS + IRSA, no LocalStack. `values-staging.yaml`. [deploy/environments/staging/README.md](../deploy/environments/staging/README.md).
-- **prod** — `values-prod.yaml`, explicit approval. **No** `make deploy`. [deploy/environments/prod/README.md](../deploy/environments/prod/README.md).
+- **prod** — EKS + real AWS KMS + IRSA. `values-prod.yaml`, explicit approval. **No** `make deploy`. [deploy/environments/prod/README.md](../deploy/environments/prod/README.md).
 
 ## Hosting
 
@@ -18,7 +17,7 @@ Infra: Terraform roots in [infrastructure/aws/local/](../infrastructure/aws/loca
 
 ```text
 Admin:   aws login → sts:AssumeRole → pki-admin → Root KMS (+ Intermediate bootstrap)
-Pods:    ServiceAccount → IRSA / Pod Identity (staging/prod)
+Pods:    ServiceAccount → IRSA / Pod Identity (prod)
          or assumed step-ca role Secret (LocalStack only) → Intermediate KMS
 ```
 

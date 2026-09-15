@@ -40,13 +40,13 @@ Never grant `step-ca` access to the Root KMS key.
 ## External services
 
 - **AWS KMS / IAM / STS** — CA keys and roles. Local uses LocalStack (fidelity only, not a prod trust boundary).
-- **Kubernetes** — runtime for `step-ca`. Staging/prod: IRSA or Pod Identity. Local: assumed-role creds in a Secret.
+- **Kubernetes** — runtime for `step-ca`. Prod: IRSA or Pod Identity. Local: assumed-role creds in a Secret.
 - **Workloads** talk only to the online Intermediate. Contract: [interfaces/leaf-service.md](interfaces/leaf-service.md).
 
 ## Deployment shape
 
 - Helm chart, 2+ replicas.
-- Staging/prod: real AWS + IRSA. Local: kind + LocalStack.
+- Prod: real AWS + IRSA. Local: kind + LocalStack.
 - Prod Terraform/Helm is never a casual Make target. Overview: [deployment.md](deployment.md).
 
 ## Policy and risk

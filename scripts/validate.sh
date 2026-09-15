@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CHART="$ROOT/deploy/helm/step-ca"
 helm lint "$CHART" -f "$CHART/values.yaml"
-for env in values-dev values-staging values-prod; do
+for env in values-dev values-prod; do
   helm template step-ca "$CHART" -f "$CHART/values.yaml" -f "$CHART/${env}.yaml" >/dev/null
   echo "template ok: $env"
 done

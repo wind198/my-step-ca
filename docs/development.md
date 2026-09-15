@@ -64,7 +64,7 @@ No `make deploy` for production.
 ## Debug entry points
 
 - **Kind cannot pull Docker Hub** — pull on the host, build single-arch `linux/amd64`, import with `ctr` (`scripts/localstack/deploy-kind.sh`). `values-dev.yaml` uses `image.tag: kind` and `pullPolicy: Never`.
-- **`capabilities.drop: ALL` → EPERM** on kind — do not set cap drop in base/`values-dev`. Staging/prod overlays keep drop ALL.
+- **`capabilities.drop: ALL` → EPERM** on kind — do not set cap drop in base/`values-dev`. Prod overlay keeps drop ALL.
 - **Helm map merge** — empty `capabilities: {}` does not clear `drop` from a parent values file. Keep `capabilities` out of base `values.yaml`.
 - **Health from the laptop** — port-forward the **pod** container port `:9000`, not Service `:443`. In-cluster probes already hit `/health`.
 - **Pods → LocalStack** — `AWS_ENDPOINT_URL=http://<docker-bridge-gateway>:4566` (often `172.17.0.1`), never `localhost` from inside the cluster.

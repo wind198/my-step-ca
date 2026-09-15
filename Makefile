@@ -23,12 +23,10 @@ validate: helm-template
 helm-lint:
 	helm lint $(CHART) -f $(CHART)/values.yaml
 	helm lint $(CHART) -f $(CHART)/values.yaml -f $(CHART)/values-dev.yaml
-	helm lint $(CHART) -f $(CHART)/values.yaml -f $(CHART)/values-staging.yaml
 	helm lint $(CHART) -f $(CHART)/values.yaml -f $(CHART)/values-prod.yaml
 
 helm-template:
 	helm template step-ca $(CHART) -f $(CHART)/values.yaml -f $(CHART)/values-dev.yaml >/dev/null
-	helm template step-ca $(CHART) -f $(CHART)/values.yaml -f $(CHART)/values-staging.yaml >/dev/null
 	helm template step-ca $(CHART) -f $(CHART)/values.yaml -f $(CHART)/values-prod.yaml >/dev/null
 
 verify-chain:

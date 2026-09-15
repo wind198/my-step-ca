@@ -9,7 +9,7 @@
 Intermediate private key stays in **AWS KMS** (LocalStack KMS locally). `step-ca` calls `kms:Sign` and `kms:GetPublicKey` only.
 
 - Not a Kubernetes Secret, ConfigMap, image, or git file
-- Pod identity: IRSA / Pod Identity in staging/prod; assumed-role Secret **local only**
+- Pod identity: IRSA / Pod Identity in prod; assumed-role Secret **local only**
 
 ## Alternatives
 

@@ -1,6 +1,12 @@
 # PKI workflows
 
-Mermaid diagrams for common private-PKI operations. Runbooks under [`../runbooks/`](../runbooks/) carry step-by-step commands; these pages show the control flow and trust boundaries.
+Mermaid diagrams for common private-PKI operations. Runbooks under [`../runbooks/`](../runbooks/) carry step-by-step commands; these pages show control flow, **scripts**, and **APIs**.
+
+| Shape | Meaning |
+|-------|---------|
+| `[[path]]` | Make target or repo script |
+| `([METHOD path])` | HTTP or AWS API |
+| `[Name]` | Actor, process, or artifact |
 
 | Workflow | When | Diagram |
 |----------|------|---------|

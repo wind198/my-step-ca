@@ -41,7 +41,7 @@ podSecurityContext:
 securityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
-  # capabilities.drop set in staging/prod — drop ALL breaks step-ca under kind/containerd
+  # capabilities.drop set in prod — drop ALL breaks step-ca under kind/containerd
 
 probes:
   readiness:
@@ -64,11 +64,12 @@ kms:
   enabled: true
   keyId: "REPLACE_ME_INTERMEDIATE_KMS_KEY_ID"
   region: us-east-1
-  # LocalStack only — leave empty in staging/prod
+  # LocalStack only — leave empty in prod
   endpointUrl: ""
 
 aws:
-  # Dev/LocalStack: inject temporary credentials via Secret
+  # Dev/LocalStack only: inject temporary credentials via Secret.
+  # Prod overlay must keep this empty (IRSA).
   credentialsSecretName: ""
   # Extra env
   extraEnv: []
