@@ -39,4 +39,4 @@ Root CA is never deployed to Kubernetes.
 
 Diagram: [../workflows/bootstrap.md](../workflows/bootstrap.md)
 
-Local kind failures (image pull, EPERM, Helm merge, port-forward): see [local-setup-and-debugging.md](../local-setup-and-debugging.md).
+Local kind failures (image pull, EPERM, Helm merge, port-forward): see [development.md](../development.md).

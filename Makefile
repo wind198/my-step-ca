@@ -35,7 +35,7 @@ verify-chain:
 	@$(ROOT)/scripts/verify-chain.sh --root $(LOCAL)/root_ca.crt --intermediate $(LOCAL)/intermediate_ca.crt
 
 docs:
-	@echo "Docs under $(ROOT)/docs"
+	@echo "Docs hub: $(ROOT)/docs/README.md"
 
 localstack-up:
 	docker compose -f $(AWS_LOCAL)/docker-compose.yml up -d
